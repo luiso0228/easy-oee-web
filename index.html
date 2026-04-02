@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Easy OEE — Real-Time OEE Tracking for Canadian Manufacturers</title>
+<meta name="description" content="Know your plant's OEE before the shift ends. Easy OEE tracks Availability, Performance and Quality in real time — no hardware, no IT, from $99/line/month.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--black:#003038;--white:#EFF5F9;--accent:#03BFB5;--red:#018076;--mid:#004146;--border:rgba(239,245,249,0.10);--border2:rgba(239,245,249,0.18);--muted:rgba(239,245,249,0.42);--muted2:rgba(239,245,249,0.68)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;line-height:1.6}
+h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;line-height:.93}
+h1{font-size:clamp(60px,9vw,125px)}
+h2{font-size:clamp(38px,5.5vw,76px)}
+h3{font-size:clamp(18px,2.5vw,26px);letter-spacing:1px}
+.tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.tag::before{content:'';width:28px;height:1px;background:var(--accent);flex-shrink:0}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:18px 56px;background:rgba(0,48,56,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--accent);text-decoration:none}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:13.5px;letter-spacing:.4px;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{background:var(--accent)!important;color:#003038!important;padding:9px 22px!important;border-radius:2px!important;font-weight:500!important;transition:opacity .2s!important}
+.nav-cta:hover{opacity:.85!important}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 56px 88px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 72% 38%,rgba(3,191,181,.07) 0%,transparent 65%),radial-gradient(ellipse 35% 50% at 18% 78%,rgba(1,128,118,.05) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 85% 85% at 50% 50%,black 20%,transparent 100%);pointer-events:none}
+.ticker{position:absolute;top:130px;right:56px;font-family:'DM Mono',monospace;font-size:10.5px;line-height:2.1;text-align:right;opacity:.13;pointer-events:none}
+.hero-content{position:relative;max-width:1000px}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:28px;display:flex;align-items:center;gap:12px}
+.hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--accent)}
+h1 em{font-style:normal;color:var(--accent)}
+h1 .out{-webkit-text-stroke:1px #EFF5F9;color:transparent}
+.hero-sub{font-size:18px;line-height:1.75;color:var(--muted2);max-width:540px;margin:28px 0 48px}
+.hero-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.btn-y{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#003038;padding:16px 34px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:15px;letter-spacing:.4px;border-radius:2px;text-decoration:none;transition:all .2s;border:none;cursor:pointer}
+.btn-y:hover{background:#02a89f;transform:translateY(-1px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;color:var(--muted2);font-size:14px;text-decoration:none;transition:color .2s;letter-spacing:.3px}
+.btn-ghost:hover{color:var(--white)}
+.stats-bar{background:var(--mid);border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{padding:38px 0 38px 52px;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-n{font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1;color:var(--accent);letter-spacing:1px}
+.stat-l{font-size:13px;color:var(--muted);margin-top:4px;max-width:160px;line-height:1.5}
+.problem{background:var(--mid);display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;padding:112px 56px}
+.pain-list{margin-top:40px}
+.pain-item{display:flex;gap:18px;padding:24px 0;border-bottom:1px solid var(--border)}
+.pain-item:first-child{border-top:1px solid var(--border)}
+.pain-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--red);padding-top:3px;min-width:22px;flex-shrink:0}
+.pain-text{font-size:15px;line-height:1.75;color:var(--muted2)}
+.pain-text strong{color:var(--white);font-weight:500}
+.dash{background:rgba(239,245,249,.03);border:1px solid var(--border2);border-radius:8px;padding:22px}
+.dash-hdr{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid var(--border)}
+.dash-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.dash-live{font-family:'DM Mono',monospace;font-size:10.5px;color:#4ade80;display:flex;align-items:center;gap:6px}
+.dash-live::before{content:'';width:6px;height:6px;background:#4ade80;border-radius:50%;animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.35}}
+.oee-g{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:10px}
+.oee-c{background:rgba(239,245,249,.04);border:1px solid var(--border);border-radius:4px;padding:13px}
+.oee-lb{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.oee-v{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--accent);letter-spacing:1px}
+.oee-v.w{color:var(--red)}
+.oee-br{height:2px;background:var(--border);border-radius:2px;margin-top:7px}
+.oee-f{height:100%;border-radius:2px;background:var(--accent)}
+.oee-f.w{background:var(--red)}
+.oee-main{background:rgba(239,245,249,.04);border:1px solid var(--border);border-radius:4px;padding:16px;margin-bottom:12px}
+.oee-big{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--accent);line-height:1;letter-spacing:1px}
+.sr{display:flex;justify-content:space-between;padding:7px 9px;background:rgba(239,245,249,.025);border-radius:3px;margin-bottom:5px;font-family:'DM Mono',monospace;font-size:10px}
+.sol{padding:112px 56px;background:var(--black)}
+.sol-inner{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;margin-top:52px}
+.pills{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
+.pill{font-size:13px;padding:6px 14px;border:1px solid var(--border2);border-radius:99px;color:var(--muted2);display:flex;align-items:center;gap:6px}
+.pull{font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,3.5vw,48px);line-height:1;letter-spacing:1px;color:var(--accent);padding:36px;background:rgba(3,191,181,.04);border:1px solid rgba(3,191,181,.12);border-radius:4px}
+.pull span{color:var(--white)}
+.how-sec{background:var(--mid);padding:112px 56px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border);margin-top:56px}
+.step{padding:42px 34px;border-right:1px solid var(--border);position:relative;overflow:hidden;transition:background .3s}
+.step:last-child{border-right:none}
+.step:hover{background:rgba(3,191,181,.025)}
+.step-bnum{font-family:'Bebas Neue',sans-serif;font-size:110px;line-height:1;color:rgba(3,191,181,.05);position:absolute;top:10px;right:12px;pointer-events:none}
+.step-ic{width:36px;height:36px;background:rgba(3,191,181,.1);border-radius:4px;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.step-ic svg{width:18px;height:18px;color:var(--accent)}
+.step p{font-size:14px;line-height:1.75;color:var(--muted2);margin-top:10px}
+.feat-sec{background:var(--black);padding:112px 56px}
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:56px}
+.feat{background:var(--black);padding:42px;transition:background .3s}
+.feat:hover{background:rgba(3,191,181,.02)}
+.feat-hd{display:flex;align-items:center;gap:12px;margin-bottom:13px}
+.dot{width:8px;height:8px;background:var(--accent);border-radius:50%;flex-shrink:0}
+.dot.r{background:var(--red)}
+.feat p{font-size:14px;line-height:1.75;color:var(--muted2);padding-left:20px}
+.proof-sec{background:var(--mid);padding:112px 56px}
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:52px}
+.pc{border:1px solid var(--border);border-radius:4px;padding:30px;transition:border-color .3s}
+.pc:hover{border-color:rgba(3,191,181,.25)}
+.stars{color:var(--accent);font-size:12px;letter-spacing:3px;margin-bottom:16px}
+.pq{font-size:15px;line-height:1.75;color:var(--muted2);font-style:italic;margin-bottom:22px}
+.pa{display:flex;align-items:center;gap:11px}
+.av{width:36px;height:36px;background:rgba(3,191,181,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--accent);flex-shrink:0}
+.an{font-size:13px;font-weight:500}
+.ar{font-size:12px;color:var(--muted);margin-top:2px}
+.pt{background:var(--black);padding:112px 56px;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.roi-box{background:rgba(3,191,181,.05);border:1px solid rgba(3,191,181,.14);border-radius:4px;padding:28px}
+.roi-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);margin-bottom:14px}
+.roi-box p{font-size:14px;line-height:1.8;color:var(--muted2);margin-bottom:10px}
+.roi-box p:last-child{margin-bottom:0}
+.cta-band{background:var(--accent);padding:96px 56px;display:flex;align-items:center;justify-content:space-between;gap:48px}
+.cta-band h2{color:var(--black);margin-bottom:10px;font-size:clamp(36px,5vw,68px)}
+.cta-band p{color:rgba(0,48,56,.6);font-size:16px;max-width:420px;line-height:1.7}
+.cta-sub{font-size:12px;color:rgba(0,48,56,.45);margin-top:10px;font-family:'DM Mono',monospace}
+.btn-dk{display:inline-block;background:#003038;color:#03BFB5;padding:18px 44px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:15px;border-radius:2px;text-decoration:none;white-space:nowrap;transition:transform .2s;flex-shrink:0}
+.btn-dk:hover{transform:translateY(-2px)}
+footer{background:var(--mid);border-top:1px solid var(--border);padding:60px 56px 34px}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr;gap:52px;margin-bottom:40px}
+.fl{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--accent);letter-spacing:3px;margin-bottom:13px}
+.fd{font-size:13px;color:var(--muted);line-height:1.8;max-width:250px}
+.fc h4{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.fc a{display:block;font-size:13px;color:rgba(239,245,249,.5);text-decoration:none;margin-bottom:8px;transition:color .2s}
+.fc a:hover{color:var(--white)}
+.fb{padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+.fi{opacity:0;transform:translateY(26px);transition:opacity .72s ease,transform .72s ease}
+.fi.on{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+@media(max-width:960px){nav{padding:14px 24px}.nav-links{display:none}.hero{padding:0 24px 72px}.stats-bar{grid-template-columns:repeat(2,1fr)}.stat{padding:28px 0 28px 24px}.problem,.sol,.pt{grid-template-columns:1fr;gap:44px;padding:80px 24px}.how-sec,.feat-sec,.proof-sec{padding:80px 24px}.steps,.feat-grid,.proof-grid{grid-template-columns:1fr}.step{border-right:none;border-bottom:1px solid var(--border)}.sol-inner{grid-template-columns:1fr;margin-top:40px}.cta-band{flex-direction:column;text-align:center;padding:72px 24px}.fg{grid-template-columns:1fr;gap:32px}.fb{flex-direction:column;gap:10px;text-align:center}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Easy OEE</a>
+  <div class="nav-links">
+    <a href="how-it-works.html">How It Works</a>
+    <a href="#features">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="roi-calculator.html">ROI Calculator</a>
+    <a href="contact.html" class="nav-cta">Book a Demo</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="ticker">AVAILABILITY — 94.2%<br>PERFORMANCE — 87.1%<br>QUALITY — 99.3%<br>OEE — 81.6%<br>LINE 3 — RUNNING<br>STOP: CHANGEOVER — 12 MIN<br>SHIFT: MORNING<br>GOOD PARTS: 1,240<br>REJECT RATE: 0.7%</div>
+  <div class="hero-content fi">
+    <div class="hero-eyebrow">Built for Canadian manufacturers</div>
+    <h1>YOU DON'T KNOW<br>YOUR <em>REAL OEE.</em><br><span class="out">WE CAN FIX THAT.</span></h1>
+    <p class="hero-sub">Easy OEE gives plant managers real-time visibility into machine performance, downtime causes, and shift efficiency — from any device on the floor. No hardware. No IT department. Live today.</p>
+    <div class="hero-actions">
+      <a href="contact.html" class="btn-y">Book a Free Demo <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      <a href="how-it-works.html" class="btn-ghost">See How It Works <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat fi"><div class="stat-n">23%</div><div class="stat-l">Average OEE improvement in year one</div></div>
+  <div class="stat fi d1"><div class="stat-n">&lt;4 min</div><div class="stat-l">Operator setup time per shift</div></div>
+  <div class="stat fi d2"><div class="stat-n">$0</div><div class="stat-l">Setup fees, ever</div></div>
+  <div class="stat fi d3"><div class="stat-n">100%</div><div class="stat-l">Web-based — zero hardware required</div></div>
+</div>
+
+<div class="problem">
+  <div class="fi">
+    <div class="tag">The problem</div>
+    <h2>MOST PLANT MANAGERS ARE FLYING BLIND.</h2>
+    <p style="font-size:16px;color:var(--muted2);line-height:1.78;margin-top:16px;max-width:460px">If you're tracking OEE at all, you're probably doing it in a spreadsheet updated at end of shift. By the time you see the numbers, the shift is over and the losses are permanent.</p>
+    <div class="pain-list">
+      <div class="pain-item"><span class="pain-num">01</span><p class="pain-text"><strong>You don't know your real OEE.</strong> You have a feeling the line isn't performing. But a feeling isn't a number, and yesterday's number doesn't help you today.</p></div>
+      <div class="pain-item"><span class="pain-num">02</span><p class="pain-text"><strong>Stop reasons are vague or never recorded.</strong> "Machine down" is not a root cause. Without knowing why, you can't fix anything systematically.</p></div>
+      <div class="pain-item"><span class="pain-num">03</span><p class="pain-text"><strong>Shift-to-shift comparison is impossible.</strong> Without consistent data, every comparison is an argument — not a conversation backed by evidence.</p></div>
+      <div class="pain-item"><span class="pain-num">04</span><p class="pain-text"><strong>By the time you see the data, it's too late.</strong> End-of-day reports tell you what happened. Easy OEE tells you what's happening — while you can still act.</p></div>
+    </div>
+  </div>
+  <div class="fi d2">
+    <div class="dash">
+      <div class="dash-hdr"><span class="dash-lbl">Live Shift — Line 2 / Morning</span><span class="dash-live">Running</span></div>
+      <div class="oee-g">
+        <div class="oee-c"><div class="oee-lb">Availability</div><div class="oee-v">91%</div><div class="oee-br"><div class="oee-f" style="width:91%"></div></div></div>
+        <div class="oee-c"><div class="oee-lb">Performance</div><div class="oee-v w">78%</div><div class="oee-br"><div class="oee-f w" style="width:78%"></div></div></div>
+        <div class="oee-c"><div class="oee-lb">Quality</div><div class="oee-v">98%</div><div class="oee-br"><div class="oee-f" style="width:98%"></div></div></div>
+      </div>
+      <div class="oee-main"><div class="oee-lb">OEE Score</div><div class="oee-big">69%</div><div class="oee-br" style="height:3px;margin-top:10px"><div class="oee-f w" style="width:69%"></div></div></div>
+      <div class="dash-lbl" style="margin-bottom:9px">Recent stops</div>
+      <div class="sr"><span style="color:var(--muted2)">Mechanical Failure</span><span style="color:var(--red)">18 min</span><span style="color:rgba(239,245,249,.2)">09:14</span></div>
+      <div class="sr"><span style="color:var(--muted2)">No Material</span><span style="color:var(--red)">7 min</span><span style="color:rgba(239,245,249,.2)">10:32</span></div>
+      <div class="sr"><span style="color:var(--muted2)">Changeover</span><span style="color:var(--red)">22 min</span><span style="color:rgba(239,245,249,.2)">11:05</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="sol">
+  <div class="fi"><div class="tag">The solution</div><h2>OEE THAT UPDATES WHILE THE SHIFT RUNS.</h2></div>
+  <div class="sol-inner">
+    <div class="fi d1">
+      <p style="font-size:16px;color:var(--muted2);line-height:1.8">Easy OEE connects the operator on the floor to the numbers on your screen. Every stop gets logged with a reason. Every part gets counted. Availability, Performance, and Quality calculate automatically — no formulas, no spreadsheets, no end-of-day data entry.</p>
+      <p style="font-size:16px;color:var(--white);line-height:1.8;margin-top:16px;font-weight:500">You see your OEE right now. Not tomorrow morning.</p>
+      <div class="pills">
+        <div class="pill"><span style="color:var(--accent)">✓</span> Real-time dashboard</div>
+        <div class="pill"><span style="color:var(--accent)">✓</span> 10 stop categories</div>
+        <div class="pill"><span style="color:var(--accent)">✓</span> Auto OEE calculation</div>
+        <div class="pill"><span style="color:var(--accent)">✓</span> Shift reports</div>
+        <div class="pill"><span style="color:var(--accent)">✓</span> Any device</div>
+      </div>
+      <a href="how-it-works.html" class="btn-y" style="margin-top:32px;display:inline-flex">See the full walkthrough →</a>
+    </div>
+    <div class="fi d2">
+      <div class="pull">"KNOW YOUR OEE<br><span>BEFORE THE SHIFT ENDS —<br>NOT THE NEXT MORNING."</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="how-sec">
+  <div class="fi"><div class="tag">How it works</div><h2>UP AND RUNNING IN ONE SHIFT.</h2><p style="font-size:17px;color:var(--muted2);line-height:1.75;max-width:500px;margin-top:14px">No IT department. No hardware. Operators are logging real data within minutes of account setup.</p></div>
+  <div class="steps fi d1">
+    <div class="step"><span class="step-bnum">1</span><div class="step-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div><h3>Operator Logs In</h3><p>Opens Easy OEE on any device — phone, tablet, or floor terminal. Selects line, shift type, product, and ideal rate. Under 60 seconds.</p></div>
+    <div class="step"><span class="step-bnum">2</span><div class="step-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h3>Stops Are Captured</h3><p>Machine stops? One tap to log the reason. Duration tracked automatically. Machine restarts? One more tap. The stop closes with duration calculated.</p></div>
+    <div class="step"><span class="step-bnum">3</span><div class="step-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div><h3>OEE Is Calculated</h3><p>Availability, Performance, and Quality update in real time. Shift summary generated automatically. No formulas. No manual work. No next-morning surprises.</p></div>
+  </div>
+</section>
+
+<section class="feat-sec" id="features">
+  <div class="fi"><div class="tag">Features</div><h2>EVERYTHING A PLANT MANAGER ACTUALLY NEEDS.</h2><p style="font-size:17px;color:var(--muted2);line-height:1.75;max-width:500px;margin-top:14px">Designed for the realities of the shop floor — not a generic BI tool retrofitted for manufacturing.</p></div>
+  <div class="feat-grid fi d1">
+    <div class="feat"><div class="feat-hd"><div class="dot"></div><h3>Real-Time OEE Dashboard</h3></div><p>See Availability, Performance, and Quality update live as the shift progresses. No waiting for end-of-day reports.</p></div>
+    <div class="feat"><div class="feat-hd"><div class="dot"></div><h3>10 Standardized Stop Reasons</h3></div><p>Mechanical Failure, Changeover, No Material, Quality Check, Maintenance, and more — consistent across every operator and every line.</p></div>
+    <div class="feat"><div class="feat-hd"><div class="dot"></div><h3>Automatic Shift Reports</h3></div><p>Every shift generates a complete summary: good parts, bad parts, total downtime, top stop causes, and final OEE score. Zero data entry required.</p></div>
+    <div class="feat"><div class="feat-hd"><div class="dot"></div><h3>Multi-Line, Multi-Shift</h3></div><p>Track Morning, Afternoon, and Night shifts across multiple production lines simultaneously — from a single account.</p></div>
+    <div class="feat"><div class="feat-hd"><div class="dot r"></div><h3>Company Data Privacy</h3></div><p>Your data stays yours. Operators see only their line. Managers see their plant. No data is ever shared across accounts.</p></div>
+    <div class="feat"><div class="feat-hd"><div class="dot r"></div><h3>Zero Hardware Required</h3></div><p>Fully web-based. Works on the phone in the operator's pocket, the tablet on the line, or the PC in your office. Nothing to install.</p></div>
+  </div>
+</section>
+
+<section class="proof-sec">
+  <div class="fi"><div class="tag">From the floor</div><h2>PLANT MANAGERS WHO MADE THE SWITCH.</h2></div>
+  <div class="proof-grid">
+    <div class="pc fi d1"><div class="stars">★★★★★</div><p class="pq">"We went from a shared spreadsheet to live OEE data on my phone. The first week we found out changeover was eating 22% of our available time. We'd never measured it before."</p><div class="pa"><div class="av">DM</div><div><div class="an">Derek M.</div><div class="ar">Plant Manager — Ontario</div></div></div></div>
+    <div class="pc fi d2"><div class="stars">★★★★★</div><p class="pq">"Our operators were skeptical. Two weeks in, they're the ones reminding each other to log stops because they can see the numbers in real time. Simplicity is what made it stick."</p><div class="pa"><div class="av">SC</div><div><div class="an">Sarah C.</div><div class="ar">Operations Director — Quebec</div></div></div></div>
+    <div class="pc fi d3"><div class="stars">★★★★★</div><p class="pq">"Enterprise OEE platforms want $2,000/month and six months to implement. Easy OEE was running on our floor the same afternoon we signed up. The difference is night and day."</p><div class="pa"><div class="av">RL</div><div><div class="an">Robert L.</div><div class="ar">Plant Manager — Alberta</div></div></div></div>
+  </div>
+</section>
+
+<div class="pt">
+  <div class="fi">
+    <div class="tag">Pricing</div>
+    <h2>STARTS AT $99/LINE/MONTH.<br>NO SETUP FEES. EVER.</h2>
+    <p style="font-size:16px;color:var(--muted2);line-height:1.75;margin-top:18px;max-width:430px">Priced per production line — you only pay for the lines you track. A single hour of downtime costs more than a full month of Easy OEE. The ROI is obvious on day one.</p>
+    <div style="display:flex;gap:14px;margin-top:28px;flex-wrap:wrap">
+      <a href="pricing.html" class="btn-y" style="padding:13px 26px;font-size:14px">See Full Pricing →</a>
+      <a href="roi-calculator.html" style="display:inline-flex;align-items:center;padding:13px 26px;font-size:14px;color:var(--muted2);text-decoration:none;border:1px solid var(--border2);border-radius:2px;transition:all .2s" onmouseover="this.style.borderColor='rgba(239,245,249,.4)'" onmouseout="this.style.borderColor='var(--border2)'">Calculate Your ROI →</a>
+    </div>
+  </div>
+  <div class="fi d2">
+    <div class="roi-box">
+      <div class="roi-title">THE MATH IS SIMPLE</div>
+      <p>If your line runs 480 minutes per shift and your OEE is 65%, you're losing 168 minutes of potential production — every single shift.</p>
+      <p>At a conservative $85/minute throughput value, that's <strong style="color:var(--accent)">$14,280 lost per week</strong> on a single line.</p>
+      <p>Easy OEE Professional covers up to 5 lines for $249/month.</p>
+      <p style="color:var(--accent);margin-top:4px">A 5% OEE improvement returns the entire annual cost in under 3 days.</p>
+    </div>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div>
+    <h2>READY TO SEE YOUR REAL OEE?</h2>
+    <p>Book a free 30-minute demo. We'll walk through the platform live using your own line configuration — no slides, no pitch.</p>
+    <p class="cta-sub">14-day free trial included. No credit card required.</p>
+  </div>
+  <a href="contact.html" class="btn-dk">Book Your Free Demo →</a>
+</div>
+
+<footer>
+  <div class="fg">
+    <div><div class="fl">Easy OEE</div><p class="fd">Real-time OEE tracking built for Canadian plant managers. No hardware. No complexity. Just clarity on the shop floor.</p><p style="font-size:12px;color:var(--muted);margin-top:13px">Made in Canada 🍁</p></div>
+    <div class="fc"><h4>Product</h4><a href="how-it-works.html">How It Works</a><a href="#features">Features</a><a href="pricing.html">Pricing</a><a href="roi-calculator.html">ROI Calculator</a></div>
+    <div class="fc"><h4>Company</h4><a href="contact.html">Book a Demo</a><a href="contact.html">Contact</a><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
+  </div>
+  <div class="fb"><span>© 2025 Easy OEE Inc. All rights reserved.</span><span>easy-oee.com</span></div>
+</footer>
+<script>
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on')}),{threshold:.08});
+document.querySelectorAll('.fi').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

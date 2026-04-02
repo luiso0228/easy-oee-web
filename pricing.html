@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Easy OEE Pricing — OEE Software from $99/line/month</title>
+<meta name="description" content="Simple, transparent pricing for Canadian plant managers. 14-day free trial, no setup fees, no contracts. Starts at $99/line/month.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--black:#003038;--white:#EFF5F9;--accent:#03BFB5;--red:#018076;--mid:#004146;--border:rgba(239,245,249,0.10);--border2:rgba(239,245,249,0.18);--muted:rgba(239,245,249,0.42);--muted2:rgba(239,245,249,0.68)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;line-height:1.6}
+h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;line-height:.93}
+h1{font-size:clamp(56px,8vw,105px)}h2{font-size:clamp(36px,5vw,68px)}h3{font-size:clamp(18px,2.5vw,26px);letter-spacing:1px}
+.tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.tag::before{content:'';width:28px;height:1px;background:var(--accent);flex-shrink:0}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:18px 56px;background:rgba(0,48,56,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--accent);text-decoration:none}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:13.5px;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--white)}
+.nav-cta{background:var(--accent)!important;color:#003038!important;padding:9px 22px!important;border-radius:2px!important;font-weight:500!important}
+.page-hdr{padding:160px 56px 72px;text-align:center;position:relative;overflow:hidden}
+.page-hdr::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 50% 60%,rgba(3,191,181,.05) 0%,transparent 70%);pointer-events:none}
+.page-hdr-content{position:relative}
+.page-hdr p{font-size:18px;color:var(--muted2);max-width:520px;margin:18px auto 0;line-height:1.75}
+/* TOGGLE */
+.toggle-wrap{display:flex;align-items:center;justify-content:center;gap:14px;margin:44px 0 0}
+.toggle-lbl{font-size:14px;color:var(--muted);transition:color .2s}
+.toggle-lbl.active{color:var(--white)}
+.toggle{width:50px;height:26px;background:var(--mid);border:1px solid var(--border2);border-radius:13px;position:relative;cursor:pointer;transition:all .3s}
+.toggle.on{background:rgba(3,191,181,.15);border-color:rgba(3,191,181,.35)}
+.toggle-knob{position:absolute;top:3px;left:3px;width:18px;height:18px;background:var(--muted);border-radius:50%;transition:all .3s}
+.toggle.on .toggle-knob{transform:translateX(24px);background:var(--accent)}
+.save-badge{font-size:11px;background:rgba(3,191,181,.1);color:var(--accent);padding:3px 10px;border-radius:99px;font-family:'DM Mono',monospace;letter-spacing:1px}
+/* PLANS */
+.plans-sec{padding:64px 56px 100px}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);max-width:1080px;margin:0 auto}
+.plan{background:var(--black);padding:44px 36px;position:relative;transition:background .3s}
+.plan:hover{background:rgba(3,191,181,.015)}
+.plan.featured{background:var(--mid);outline:2px solid var(--accent);z-index:1}
+.plan-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--black);font-size:11px;font-weight:500;padding:4px 16px;border-radius:99px;font-family:'DM Mono',monospace;letter-spacing:1px;white-space:nowrap}
+.plan-name{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.plan-price{font-family:'Bebas Neue',sans-serif;font-size:68px;line-height:1;color:var(--white);letter-spacing:1px}
+.plan-price sup{font-size:30px;vertical-align:top;margin-top:12px;display:inline-block;color:var(--muted)}
+.plan-price.custom{font-size:42px;color:var(--muted);padding-top:14px}
+.plan-period{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-top:6px}
+.plan-savings{font-size:12px;color:var(--accent);margin-top:4px;height:18px;font-family:'DM Mono',monospace}
+.plan-divider{border:none;border-top:1px solid var(--border);margin:22px 0}
+.plan-desc{font-size:14px;color:var(--muted2);line-height:1.7;margin-bottom:24px}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
+.plan-features li{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;line-height:1.5}
+.plan-features li.yes{color:var(--muted2)}
+.plan-features li.no{color:rgba(239,245,249,.25)}
+.ck{color:var(--accent);font-size:15px;flex-shrink:0;margin-top:-1px}
+.cx{color:rgba(239,245,249,.2);font-size:15px;flex-shrink:0}
+.btn-plan{display:block;width:100%;padding:13px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;letter-spacing:.4px;border-radius:2px;cursor:pointer;text-decoration:none;text-align:center;transition:all .2s;border:1px solid var(--border2);background:transparent;color:var(--white)}
+.btn-plan:hover{border-color:rgba(239,245,249,.4);background:rgba(239,245,249,.05)}
+.btn-plan.primary{background:var(--accent);color:#003038;border-color:var(--accent)}
+.btn-plan.primary:hover{background:#02a89f}
+.btn-sub{font-size:12px;color:var(--muted);text-align:center;margin-top:10px;font-family:'DM Mono',monospace}
+/* ROI CALLOUT */
+.roi-callout{max-width:1080px;margin:48px auto 0;background:rgba(3,191,181,.05);border:1px solid rgba(3,191,181,.14);border-radius:4px;padding:36px 40px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:40px}
+.roi-callout h3{font-size:22px;color:var(--accent);margin-bottom:10px}
+.roi-callout p{font-size:14px;color:var(--muted2);line-height:1.8}
+.roi-callout p strong{color:var(--white)}
+.btn-y{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#003038;padding:14px 28px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;border-radius:2px;text-decoration:none;transition:all .2s;white-space:nowrap}
+.btn-y:hover{background:#02a89f;transform:translateY(-1px)}
+/* COMPARE TABLE */
+.compare-sec{background:var(--mid);padding:80px 56px}
+.compare-table{width:100%;max-width:900px;margin:44px auto 0;border-collapse:collapse;font-size:14px}
+.compare-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:14px 18px;text-align:center;border-bottom:1px solid var(--border)}
+.compare-table th:first-child{text-align:left}
+.compare-table td{padding:13px 18px;border-bottom:1px solid var(--border);text-align:center;color:var(--muted)}
+.compare-table td:first-child{text-align:left;color:var(--white)}
+.compare-table tr:hover td{background:rgba(3,191,181,.02)}
+.yes-c{color:var(--accent);font-size:17px}
+.no-c{color:rgba(239,245,249,.15);font-size:17px}
+.hi{color:var(--accent);font-weight:500}
+/* FAQ */
+.faq-sec{padding:80px 56px}
+.faq-inner{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:22px 0;cursor:pointer;font-size:16px;user-select:none;gap:16px;transition:color .2s}
+.faq-q:hover{color:var(--accent)}
+.faq-icon{font-size:20px;color:var(--muted);transition:transform .3s;flex-shrink:0}
+.faq-a{font-size:14px;color:var(--muted2);line-height:1.8;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s}
+.faq-item.open .faq-a{max-height:160px;padding-bottom:22px}
+.faq-item.open .faq-icon{transform:rotate(45deg);color:var(--accent)}
+.cta-band{background:var(--accent);padding:96px 56px;display:flex;align-items:center;justify-content:space-between;gap:48px}
+.cta-band h2{color:var(--black);font-size:clamp(32px,5vw,64px);margin-bottom:10px}
+.cta-band p{color:rgba(0,48,56,.6);font-size:16px;max-width:420px;line-height:1.7}
+.btn-dk{display:inline-block;background:#003038;color:#03BFB5;padding:17px 42px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:15px;border-radius:2px;text-decoration:none;white-space:nowrap;transition:transform .2s;flex-shrink:0}
+.btn-dk:hover{transform:translateY(-2px)}
+footer{background:var(--mid);border-top:1px solid var(--border);padding:52px 56px 30px}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:36px}
+.fl{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent);letter-spacing:3px;margin-bottom:12px}
+.fd{font-size:13px;color:var(--muted);line-height:1.8;max-width:240px}
+.fc h4{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.fc a{display:block;font-size:13px;color:rgba(239,245,249,.5);text-decoration:none;margin-bottom:8px;transition:color .2s}
+.fc a:hover{color:var(--white)}
+.fb{padding-top:22px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+.fi{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.fi.on{opacity:1;transform:none}
+@media(max-width:960px){nav{padding:14px 24px}.nav-links{display:none}.page-hdr{padding:120px 24px 60px}.plans-sec,.compare-sec,.faq-sec{padding:64px 24px}.plans-grid{grid-template-columns:1fr}.plan.featured{outline-width:1px}.roi-callout{grid-template-columns:1fr;gap:20px}.cta-band{flex-direction:column;text-align:center;padding:72px 24px}.fg{grid-template-columns:1fr;gap:28px}.fb{flex-direction:column;gap:10px;text-align:center}footer{padding:44px 24px 26px}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Easy OEE</a>
+  <div class="nav-links">
+    <a href="how-it-works.html">How It Works</a>
+    <a href="index.html#features">Features</a>
+    <a href="pricing.html" class="active">Pricing</a>
+    <a href="roi-calculator.html">ROI Calculator</a>
+    <a href="contact.html" class="nav-cta">Book a Demo</a>
+  </div>
+</nav>
+
+<div class="page-hdr">
+  <div class="page-hdr-content fi">
+    <div class="tag" style="justify-content:center;margin-bottom:16px">Pricing</div>
+    <h1>PRICING THAT MAKES<br>THE ROI OBVIOUS.</h1>
+    <p>Pricing is per production line — you only pay for the lines you track. One hour of downtime costs more than a full month of Easy OEE. No setup fees. No contracts.</p>
+    <div class="toggle-wrap">
+      <span class="toggle-lbl active" id="mlbl">Monthly</span>
+      <div class="toggle" id="toggle" onclick="toggleBilling()"><div class="toggle-knob" id="knob"></div></div>
+      <span class="toggle-lbl" id="ylbl">Annual</span>
+      <span class="save-badge">SAVE 20%</span>
+    </div>
+  </div>
+</div>
+
+<div class="plans-sec">
+  <div class="plans-grid fi">
+    <!-- STARTER -->
+    <div class="plan">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price"><sup>$</sup><span id="sp">99</span></div>
+      <div class="plan-period">per line / month — billed <span id="sper">monthly</span></div>
+      <div class="plan-savings" id="ssav"></div>
+      <hr class="plan-divider">
+      <p class="plan-desc">For single-line operations getting started with OEE tracking. One line, one operator, full OEE visibility. Everything you need, nothing you don't.</p>
+      <ul class="plan-features">
+        <li class="yes"><span class="ck">✓</span> 1 production line</li>
+        <li class="yes"><span class="ck">✓</span> 1 operator account</li>
+        <li class="yes"><span class="ck">✓</span> All 10 stop reason categories</li>
+        <li class="yes"><span class="ck">✓</span> Real-time OEE dashboard</li>
+        <li class="yes"><span class="ck">✓</span> Shift summary reports</li>
+        <li class="yes"><span class="ck">✓</span> 90-day data history</li>
+        <li class="yes"><span class="ck">✓</span> Email support</li>
+        <li class="no"><span class="cx">✕</span> Multi-line comparison</li>
+        <li class="no"><span class="cx">✕</span> Supervisor dashboard</li>
+        <li class="no"><span class="cx">✕</span> CSV export</li>
+      </ul>
+      <a href="contact.html" class="btn-plan">Get Started</a>
+      <div class="btn-sub">14-day free trial included</div>
+    </div>
+    <!-- PROFESSIONAL -->
+    <div class="plan featured">
+      <div class="plan-badge">MOST POPULAR</div>
+      <div class="plan-name">Professional</div>
+      <div class="plan-price"><sup>$</sup><span id="pp">249</span></div>
+      <div class="plan-period">per month, billed <span id="pper">monthly</span></div>
+      <div class="plan-savings" id="psav"></div>
+      <hr class="plan-divider">
+      <p class="plan-desc">For multi-line plants that need full visibility across all their lines. One flat rate covers up to 5 production lines and 5 operators.</p>
+      <ul class="plan-features">
+        <li class="yes"><span class="ck">✓</span> Up to 5 production lines</li>
+        <li class="yes"><span class="ck">✓</span> Up to 5 operator accounts</li>
+        <li class="yes"><span class="ck">✓</span> All 10 stop reason categories</li>
+        <li class="yes"><span class="ck">✓</span> Real-time OEE dashboard</li>
+        <li class="yes"><span class="ck">✓</span> Shift summary reports</li>
+        <li class="yes"><span class="ck">✓</span> 1-year data history</li>
+        <li class="yes"><span class="ck">✓</span> Multi-line comparison</li>
+        <li class="yes"><span class="ck">✓</span> Supervisor dashboard</li>
+        <li class="yes"><span class="ck">✓</span> CSV data export</li>
+        <li class="yes"><span class="ck">✓</span> Priority email support</li>
+      </ul>
+      <a href="contact.html" class="btn-plan primary">Get Started</a>
+      <div class="btn-sub">14-day free trial included</div>
+    </div>
+    <!-- ENTERPRISE -->
+    <div class="plan">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price custom">Custom</div>
+      <div class="plan-period">tailored to your scale</div>
+      <div class="plan-savings">&nbsp;</div>
+      <hr class="plan-divider">
+      <p class="plan-desc">For facilities with 5+ lines, multiple plants, or custom integration requirements. Tailored to your operation.</p>
+      <ul class="plan-features">
+        <li class="yes"><span class="ck">✓</span> Unlimited production lines</li>
+        <li class="yes"><span class="ck">✓</span> Unlimited operator accounts</li>
+        <li class="yes"><span class="ck">✓</span> Custom stop reason categories</li>
+        <li class="yes"><span class="ck">✓</span> Real-time OEE dashboard</li>
+        <li class="yes"><span class="ck">✓</span> Shift summary reports</li>
+        <li class="yes"><span class="ck">✓</span> Unlimited data history</li>
+        <li class="yes"><span class="ck">✓</span> Multi-plant dashboard</li>
+        <li class="yes"><span class="ck">✓</span> Dedicated onboarding</li>
+        <li class="yes"><span class="ck">✓</span> SLA + priority support</li>
+        <li class="yes"><span class="ck">✓</span> Custom integrations</li>
+      </ul>
+      <a href="contact.html" class="btn-plan">Contact Sales</a>
+      <div class="btn-sub">Let's talk about your plant</div>
+    </div>
+  </div>
+  <div class="roi-callout fi">
+    <div>
+      <h3>Is $249/month worth it?</h3>
+      <p>If your line runs 480 minutes/shift and your OEE is 65%, you're losing 168 minutes of production every shift. At a conservative <strong>$85/minute throughput value</strong>, that's $14,280 in lost production per week — on a single line. Easy OEE Professional covers up to 5 lines for $249/month. A 5% OEE improvement on a single line returns the full annual cost in under 4 days.</p>
+    </div>
+    <a href="roi-calculator.html" class="btn-y">Calculate Your ROI →</a>
+  </div>
+</div>
+
+<div class="compare-sec">
+  <div class="fi"><div class="tag" style="justify-content:center">Plan comparison</div><h2 style="text-align:center">EVERYTHING SIDE BY SIDE.</h2></div>
+  <table class="compare-table fi">
+    <thead><tr><th>Feature</th><th>Starter</th><th style="color:var(--accent)">Professional</th><th>Enterprise</th></tr></thead>
+    <tbody>
+      <tr><td>Production lines</td><td>1</td><td class="hi">Up to 5</td><td>Unlimited</td></tr>
+      <tr><td>Operator accounts</td><td>1</td><td class="hi">5</td><td>Unlimited</td></tr>
+      <tr><td>Stop reason categories</td><td>10</td><td class="hi">10</td><td>Custom</td></tr>
+      <tr><td>Real-time OEE dashboard</td><td><span class="yes-c">✓</span></td><td><span class="yes-c hi">✓</span></td><td><span class="yes-c">✓</span></td></tr>
+      <tr><td>Shift summary reports</td><td><span class="yes-c">✓</span></td><td><span class="yes-c hi">✓</span></td><td><span class="yes-c">✓</span></td></tr>
+      <tr><td>Data history</td><td>90 days</td><td class="hi">1 year</td><td>Unlimited</td></tr>
+      <tr><td>Multi-line comparison</td><td><span class="no-c">✕</span></td><td><span class="yes-c hi">✓</span></td><td><span class="yes-c">✓</span></td></tr>
+      <tr><td>Supervisor dashboard</td><td><span class="no-c">✕</span></td><td><span class="yes-c hi">✓</span></td><td><span class="yes-c">✓</span></td></tr>
+      <tr><td>CSV data export</td><td><span class="no-c">✕</span></td><td><span class="yes-c hi">✓</span></td><td><span class="yes-c">✓</span></td></tr>
+      <tr><td>Multi-plant view</td><td><span class="no-c">✕</span></td><td><span class="no-c">✕</span></td><td><span class="yes-c">✓</span></td></tr>
+      <tr><td>Dedicated onboarding</td><td><span class="no-c">✕</span></td><td><span class="no-c">✕</span></td><td><span class="yes-c">✓</span></td></tr>
+      <tr><td>SLA support</td><td><span class="no-c">✕</span></td><td><span class="no-c">✕</span></td><td><span class="yes-c">✓</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="faq-sec">
+  <div class="faq-inner">
+    <div class="fi"><div class="tag">FAQ</div><h2>COMMON QUESTIONS.</h2></div>
+    <div style="margin-top:40px">
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is there a free trial?<span class="faq-icon">+</span></div><div class="faq-a">Yes. Every plan starts with a 14-day free trial — no credit card required. You get full access to the plan you choose, with real data from your floor. Cancel any time before the trial ends and you won't be charged.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I change plans later?<span class="faq-icon">+</span></div><div class="faq-a">Yes, at any time. Upgrades take effect immediately. Downgrades take effect at the start of your next billing cycle. No penalties, no fine print.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is there a setup fee?<span class="faq-icon">+</span></div><div class="faq-a">No. Never. Not for any plan, at any time. The price you see is the price you pay.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do you offer annual billing discounts?<span class="faq-icon">+</span></div><div class="faq-a">Yes — 20% off when you pay annually. That's two months free compared to monthly billing. Toggle the switch above to see annual prices.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do you offer discounts for multiple plants?<span class="faq-icon">+</span></div><div class="faq-a">Yes. If you're managing two or more facilities, contact us for multi-plant pricing. Enterprise plans can cover unlimited locations under a single contract.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What happens when I cancel?<span class="faq-icon">+</span></div><div class="faq-a">You keep access until the end of your billing period. After that, your account is paused and your data is preserved for 30 days so you can come back without losing anything. Professional and Enterprise users can export data at any time.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do I need to sign a long-term contract?<span class="faq-icon">+</span></div><div class="faq-a">No. Monthly plans are month-to-month. Annual plans are billed once per year. Cancel any time — no commitments, no penalties.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div><h2>NOT SURE WHICH PLAN?</h2><p>Book a free 30-minute demo and we'll tell you honestly which plan fits your number of lines and goals — or whether Easy OEE is even the right tool for your situation.</p></div>
+  <a href="contact.html" class="btn-dk">Book a Free Demo →</a>
+</div>
+
+<footer>
+  <div class="fg">
+    <div><div class="fl">Easy OEE</div><p class="fd">Real-time OEE tracking built for Canadian plant managers. No hardware. No complexity.</p><p style="font-size:12px;color:var(--muted);margin-top:12px">Made in Canada 🍁</p></div>
+    <div class="fc"><h4>Product</h4><a href="how-it-works.html">How It Works</a><a href="index.html#features">Features</a><a href="pricing.html">Pricing</a><a href="roi-calculator.html">ROI Calculator</a></div>
+    <div class="fc"><h4>Company</h4><a href="contact.html">Book a Demo</a><a href="contact.html">Contact</a><a href="#">Privacy Policy</a><a href="#">Terms</a></div>
+  </div>
+  <div class="fb"><span>© 2025 Easy OEE Inc. All rights reserved.</span><span>easy-oee.com</span></div>
+</footer>
+<script>
+let yearly=false;
+const prices={s:[99,79],p:[249,199]};
+function toggleBilling(){
+  yearly=!yearly;
+  document.getElementById('toggle').classList.toggle('on',yearly);
+  document.getElementById('mlbl').classList.toggle('active',!yearly);
+  document.getElementById('ylbl').classList.toggle('active',yearly);
+  document.getElementById('sp').textContent=prices.s[yearly?1:0];
+  document.getElementById('pp').textContent=prices.p[yearly?1:0];
+  const per=yearly?'annually':'monthly';
+  document.getElementById('sper').textContent=per;
+  document.getElementById('pper').textContent=per;
+  document.getElementById('ssav').textContent=yearly?`Save $${(prices.s[0]-prices.s[1])*12} per year`:'save 20% annually';
+  document.getElementById('psav').textContent=yearly?`Save $${(prices.p[0]-prices.p[1])*12} per year`:'save 20% annually';
+}
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on')}),{threshold:.08});
+document.querySelectorAll('.fi').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

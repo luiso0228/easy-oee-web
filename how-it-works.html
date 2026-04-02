@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>How Easy OEE Works — Real-Time OEE in 3 Steps</title>
+<meta name="description" content="See exactly how Easy OEE tracks OEE on the shop floor. Operators log in, record stops, and your dashboard updates live. No hardware. Setup in minutes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--black:#003038;--white:#EFF5F9;--accent:#03BFB5;--red:#018076;--mid:#004146;--border:rgba(239,245,249,0.10);--border2:rgba(239,245,249,0.18);--muted:rgba(239,245,249,0.42);--muted2:rgba(239,245,249,0.68)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;line-height:1.6}
+h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;line-height:.93}
+h1{font-size:clamp(58px,8.5vw,110px)}h2{font-size:clamp(36px,5vw,70px)}h3{font-size:clamp(18px,2.5vw,26px);letter-spacing:1px}
+.tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.tag::before{content:'';width:28px;height:1px;background:var(--accent);flex-shrink:0}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:18px 56px;background:rgba(0,48,56,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--accent);text-decoration:none}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:13.5px;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--white)}
+.nav-cta{background:var(--accent)!important;color:#003038!important;padding:9px 22px!important;border-radius:2px!important;font-weight:500!important}
+.btn-y{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#003038;padding:15px 32px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:14.5px;border-radius:2px;text-decoration:none;transition:all .2s}
+.btn-y:hover{background:#02a89f;transform:translateY(-1px)}
+/* PAGE HEADER */
+.page-hdr{padding:160px 56px 80px;position:relative;overflow:hidden}
+.page-hdr::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 50% 60%,rgba(3,191,181,.05) 0%,transparent 70%);pointer-events:none}
+.page-hdr::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(239,245,249,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(239,245,249,.07) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%);pointer-events:none}
+.page-hdr-content{position:relative;max-width:800px}
+.page-hdr p{font-size:18px;color:var(--muted2);line-height:1.75;max-width:520px;margin-top:20px}
+/* STEP SECTIONS */
+.step-sec{padding:100px 56px;border-bottom:1px solid var(--border)}
+.step-sec:nth-child(even){background:var(--mid)}
+.step-inner{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;max-width:1100px;margin:0 auto}
+.step-inner.reverse{direction:rtl}
+.step-inner.reverse>*{direction:ltr}
+.step-num-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,14vw,180px);line-height:1;color:rgba(3,191,181,.06);letter-spacing:0;margin-bottom:-20px;display:block}
+.step-content h2{margin-bottom:20px}
+.step-content p{font-size:16px;color:var(--muted2);line-height:1.8;margin-bottom:16px}
+.step-content p:last-child{margin-bottom:0}
+.step-content p strong{color:var(--white);font-weight:500}
+/* MOCK SCREENS */
+.screen{background:rgba(239,245,249,.03);border:1px solid var(--border2);border-radius:8px;overflow:hidden}
+.screen-bar{background:var(--mid);padding:12px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.screen-dot{width:10px;height:10px;border-radius:50%}
+.screen-body{padding:20px}
+/* Operator screen mock */
+.op-form{display:flex;flex-direction:column;gap:14px}
+.op-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.op-radio-group{display:flex;flex-direction:column;gap:7px}
+.op-radio{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted2);padding:8px 10px;border-radius:3px;cursor:default}
+.op-radio.selected{background:rgba(3,191,181,.08);color:var(--white)}
+.op-radio-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0}
+.op-radio.selected .op-radio-dot{border-color:var(--accent);background:var(--accent)}
+.op-input{background:rgba(239,245,249,.05);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted2)}
+/* Shift screen mock */
+.shift-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.sb{padding:12px 8px;border-radius:4px;font-size:11px;font-weight:500;text-align:center;cursor:default;letter-spacing:.5px}
+.sb.red{background:#e53555;color:#fff}
+.sb.amber{background:#f59e0b;color:#000}
+.sb.green{background:#16a34a;color:#fff;grid-column:1/-1;font-size:13px;padding:14px}
+.sb.gray{background:rgba(239,245,249,.1);color:var(--muted);font-size:10px}
+/* Stop list */
+.stop-rows{display:flex;flex-direction:column;gap:6px}
+.stop-row{display:flex;justify-content:space-between;padding:9px 11px;border-radius:3px;font-family:'DM Mono',monospace;font-size:10.5px}
+.stop-row.open{background:rgba(245,159,11,.1);border:1px solid rgba(245,159,11,.25)}
+.stop-row.closed{background:rgba(239,245,249,.025);border:1px solid transparent}
+/* REASONS TABLE */
+.reasons-table{width:100%;border-collapse:collapse;margin-top:36px;font-size:14px}
+.reasons-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:12px 16px;text-align:left;border-bottom:1px solid var(--border)}
+.reasons-table td{padding:13px 16px;border-bottom:1px solid var(--border);color:var(--muted2);vertical-align:top}
+.reasons-table td:first-child{font-family:'DM Mono',monospace;color:var(--accent);font-size:12px;width:30px}
+.reasons-table td:nth-child(2){color:var(--white);font-weight:400}
+.reasons-table tr:hover td{background:rgba(239,245,249,.025)}
+/* OEE FORMULA */
+.formula-sec{background:var(--mid);padding:100px 56px}
+.formula-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:52px}
+.formula-card{background:var(--mid);padding:40px 32px}
+.formula-name{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--accent);margin-bottom:8px;letter-spacing:1px}
+.formula-eq{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:16px;padding:12px;background:rgba(239,245,249,.04);border-radius:3px}
+.formula-desc{font-size:14px;color:var(--muted2);line-height:1.75}
+.formula-oee{grid-column:1/-1;background:rgba(3,191,181,.04);border-top:1px solid var(--border);padding:32px}
+.formula-oee .formula-name{font-size:36px;color:var(--white)}
+.formula-oee .formula-eq{font-size:14px;color:var(--accent)}
+/* SETUP */
+.setup-sec{padding:100px 56px}
+.setup-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:52px}
+.setup-step{background:var(--black);padding:36px 28px;position:relative;overflow:hidden}
+.setup-step::before{content:attr(data-num);font-family:'Bebas Neue',sans-serif;font-size:90px;color:rgba(3,191,181,.05);position:absolute;top:8px;right:10px;line-height:1}
+.setup-step h3{font-size:20px;color:var(--white);margin-bottom:10px}
+.setup-step p{font-size:13.5px;color:var(--muted2);line-height:1.72}
+/* FAQ */
+.faq-sec{background:var(--mid);padding:100px 56px}
+.faq-inner{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:22px 0;cursor:pointer;font-size:16px;user-select:none;gap:16px;transition:color .2s}
+.faq-q:hover{color:var(--accent)}
+.faq-icon{font-size:20px;color:var(--muted);transition:transform .3s;flex-shrink:0}
+.faq-a{font-size:14px;color:var(--muted2);line-height:1.8;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:22px}
+.faq-item.open .faq-icon{transform:rotate(45deg);color:var(--accent)}
+/* CTA */
+.cta-band{background:var(--accent);padding:96px 56px;display:flex;align-items:center;justify-content:space-between;gap:48px}
+.cta-band h2{color:var(--black);font-size:clamp(32px,5vw,64px);margin-bottom:10px}
+.cta-band p{color:rgba(0,48,56,.6);font-size:16px;max-width:420px;line-height:1.7}
+.btn-dk{display:inline-block;background:#003038;color:#03BFB5;padding:17px 42px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:15px;border-radius:2px;text-decoration:none;white-space:nowrap;transition:transform .2s;flex-shrink:0}
+.btn-dk:hover{transform:translateY(-2px)}
+footer{background:var(--mid);border-top:1px solid var(--border);padding:52px 56px 30px}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:36px}
+.fl{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent);letter-spacing:3px;margin-bottom:12px}
+.fd{font-size:13px;color:var(--muted);line-height:1.8;max-width:240px}
+.fc h4{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.fc a{display:block;font-size:13px;color:rgba(239,245,249,.5);text-decoration:none;margin-bottom:8px;transition:color .2s}
+.fc a:hover{color:var(--white)}
+.fb{padding-top:22px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+.fi{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.fi.on{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+@media(max-width:960px){nav{padding:14px 24px}.nav-links{display:none}.page-hdr{padding:120px 24px 60px}.step-sec{padding:72px 24px}.step-inner{grid-template-columns:1fr;gap:36px}.step-inner.reverse{direction:ltr}.formula-sec,.setup-sec,.faq-sec{padding:72px 24px}.formula-grid,.setup-steps{grid-template-columns:1fr}.cta-band{flex-direction:column;text-align:center;padding:72px 24px}.fg{grid-template-columns:1fr;gap:28px}.fb{flex-direction:column;gap:10px;text-align:center}footer{padding:44px 24px 26px}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Easy OEE</a>
+  <div class="nav-links">
+    <a href="how-it-works.html" class="active">How It Works</a>
+    <a href="index.html#features">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="roi-calculator.html">ROI Calculator</a>
+    <a href="contact.html" class="nav-cta">Book a Demo</a>
+  </div>
+</nav>
+
+<div class="page-hdr">
+  <div class="page-hdr-content fi">
+    <div class="tag">How it works</div>
+    <h1>FROM ZERO TO LIVE OEE IN ONE SHIFT.</h1>
+    <p>Here's exactly what happens when an operator picks up their phone and starts a shift in Easy OEE — and what you see as plant manager while it runs.</p>
+  </div>
+</div>
+
+<!-- STEP 1 -->
+<div class="step-sec">
+  <div class="step-inner">
+    <div class="fi">
+      <span class="step-num-big">01</span>
+      <div class="tag">Step 1 — Shift start</div>
+      <h2>THE OPERATOR LOGS IN.</h2>
+      <p>The operator opens Easy OEE on any device — phone, tablet, or shared floor terminal. No app download. No training manual. They sign in, select their production line, choose their shift, enter the product they're running, and set the planned minutes and ideal rate.</p>
+      <p><strong>Total time: under 60 seconds.</strong></p>
+      <p>The shift begins. The timer starts. The dashboard goes live. You can see it from your office, your phone, or anywhere with an internet connection.</p>
+    </div>
+    <div class="fi d2">
+      <div class="screen">
+        <div class="screen-bar">
+          <div class="screen-dot" style="background:#ff5f56"></div>
+          <div class="screen-dot" style="background:#ffbd2e"></div>
+          <div class="screen-dot" style="background:#27c93f"></div>
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-left:8px">app.easy-oee.com/operator</span>
+        </div>
+        <div class="screen-body">
+          <div class="op-form">
+            <div><div class="op-label">Production Line</div><div class="op-radio-group"><div class="op-radio selected"><div class="op-radio-dot"></div>Machine 1</div><div class="op-radio"><div class="op-radio-dot"></div>Machine 2</div><div class="op-radio"><div class="op-radio-dot"></div>Line 3</div></div></div>
+            <div><div class="op-label">Shift Type</div><div class="op-radio-group"><div class="op-radio selected"><div class="op-radio-dot"></div>Morning</div><div class="op-radio"><div class="op-radio-dot"></div>Afternoon</div><div class="op-radio"><div class="op-radio-dot"></div>Night</div></div></div>
+            <div><div class="op-label">Product</div><div class="op-input">Part #A-274 — Steel Bracket</div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div><div class="op-label">Planned (min)</div><div class="op-input">480</div></div>
+              <div><div class="op-label">Ideal Rate/min</div><div class="op-input">120</div></div>
+            </div>
+            <div style="background:#03BFB5;color:#003038;padding:13px;text-align:center;border-radius:3px;font-weight:500;font-size:13px;cursor:default">Start Shift →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 2 -->
+<div class="step-sec">
+  <div class="step-inner reverse">
+    <div class="fi">
+      <span class="step-num-big">02</span>
+      <div class="tag">Step 2 — During the shift</div>
+      <h2>STOPS GET LOGGED IN REAL TIME.</h2>
+      <p>When the machine stops, the operator taps the reason. That's the entire workflow. <strong>One tap.</strong></p>
+      <p>The button turns amber. The timer starts counting. The system records the exact start time and reason. When the machine restarts, the operator taps again — the stop closes and the duration is calculated automatically.</p>
+      <p>No paper. No radio calls to the office. No end-of-day reconstruction of what happened and for how long.</p>
+    </div>
+    <div class="fi d2">
+      <div class="screen">
+        <div class="screen-bar">
+          <div class="screen-dot" style="background:#ff5f56"></div>
+          <div class="screen-dot" style="background:#ffbd2e"></div>
+          <div class="screen-dot" style="background:#27c93f"></div>
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-left:8px">Shift in Progress — Machine 1</span>
+        </div>
+        <div class="screen-body">
+          <div class="shift-btns">
+            <div class="sb green">● MACHINE RUNNING</div>
+            <div class="sb amber">⏱ Mechanical Failure — 00:08:23</div>
+            <div class="sb red">No Material</div>
+            <div class="sb red">Changeover</div>
+            <div class="sb red">Quality Check</div>
+            <div class="sb red">Scheduled Break</div>
+            <div class="sb red">No Operator</div>
+            <div class="sb red">Maintenance</div>
+            <div class="sb red">Training</div>
+            <div class="sb gray">No Production Scheduled</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STOP REASONS TABLE -->
+<div style="padding:0 56px 80px;background:var(--mid)">
+  <div class="fi">
+    <div class="tag">Stop reason categories</div>
+    <h2>10 STANDARDIZED REASONS.</h2>
+    <p style="font-size:16px;color:var(--muted2);line-height:1.75;max-width:540px;margin-top:14px">Every reason is consistent across all lines and all operators — so when you compare shifts or lines, you're comparing apples to apples.</p>
+    <table class="reasons-table">
+      <thead><tr><th>#</th><th>Reason</th><th>When to use it</th></tr></thead>
+      <tbody>
+        <tr><td>01</td><td>Mechanical Failure</td><td>Unplanned equipment breakdown or malfunction</td></tr>
+        <tr><td>02</td><td>Changeover</td><td>Product or tooling change between runs</td></tr>
+        <tr><td>03</td><td>No Material</td><td>Waiting for raw materials or components to arrive</td></tr>
+        <tr><td>04</td><td>Quality Check</td><td>Inspection, measurement, or quality hold requiring stoppage</td></tr>
+        <tr><td>05</td><td>Scheduled Break</td><td>Meal breaks, shift meetings, planned pauses</td></tr>
+        <tr><td>06</td><td>No Operator</td><td>Waiting for an available qualified operator</td></tr>
+        <tr><td>07</td><td>Maintenance</td><td>Planned preventive maintenance activities</td></tr>
+        <tr><td>08</td><td>Training</td><td>Operator training activities during production hours</td></tr>
+        <tr><td>09</td><td>No Production Scheduled</td><td>Planned idle time — line not scheduled to run</td></tr>
+        <tr><td>10</td><td>Other</td><td>Anything not captured by the above categories</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step-sec">
+  <div class="step-inner">
+    <div class="fi">
+      <span class="step-num-big">03</span>
+      <div class="tag">Step 3 — End of shift</div>
+      <h2>OEE CALCULATES AUTOMATICALLY.</h2>
+      <p>When the operator ends the shift, they record the good parts and bad parts produced. Easy OEE does the rest.</p>
+      <p>Availability, Performance, and Quality are calculated instantly from the shift data. The OEE score appears. The shift summary is generated — a complete record of every stop, every reason, every minute of lost production.</p>
+      <p><strong>You get the numbers that define exactly how well your line performed — with zero manual calculation.</strong></p>
+    </div>
+    <div class="fi d2">
+      <div class="screen">
+        <div class="screen-bar">
+          <div class="screen-dot" style="background:#ff5f56"></div>
+          <div class="screen-dot" style="background:#ffbd2e"></div>
+          <div class="screen-dot" style="background:#27c93f"></div>
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-left:8px">Shift Summary — Machine 1 / Morning</span>
+        </div>
+        <div class="screen-body">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+            <div style="background:rgba(239,245,249,.04);border:1px solid var(--border);border-radius:4px;padding:12px;text-align:center"><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:5px;text-transform:uppercase">Availability</div><div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--accent)">91%</div></div>
+            <div style="background:rgba(239,245,249,.04);border:1px solid var(--border);border-radius:4px;padding:12px;text-align:center"><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:5px;text-transform:uppercase">Performance</div><div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--red)">78%</div></div>
+            <div style="background:rgba(239,245,249,.04);border:1px solid var(--border);border-radius:4px;padding:12px;text-align:center"><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:5px;text-transform:uppercase">Quality</div><div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--accent)">98%</div></div>
+          </div>
+          <div style="background:rgba(3,191,181,.06);border:1px solid rgba(3,191,181,.15);border-radius:4px;padding:16px;text-align:center;margin-bottom:12px"><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:5px;text-transform:uppercase">Final OEE</div><div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--accent);line-height:1">69%</div></div>
+          <div class="stop-rows">
+            <div class="stop-row closed"><span style="color:var(--muted2)">Mechanical Failure</span><span style="color:var(--red)">18 min</span></div>
+            <div class="stop-row closed"><span style="color:var(--muted2)">Changeover</span><span style="color:var(--red)">22 min</span></div>
+            <div class="stop-row closed"><span style="color:var(--muted2)">No Material</span><span style="color:var(--red)">7 min</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OEE FORMULA -->
+<div class="formula-sec">
+  <div class="fi"><div class="tag">The math</div><h2>HOW OEE IS CALCULATED.</h2><p style="font-size:16px;color:var(--muted2);line-height:1.75;max-width:500px;margin-top:14px">Easy OEE computes all three components automatically. But here's what's happening under the hood.</p></div>
+  <div class="formula-grid fi d1">
+    <div class="formula-card"><div class="formula-name">Availability</div><div class="formula-eq">= (Planned Min − Stop Min)<br>  / Planned Min</div><p class="formula-desc">"Was the machine running when it was supposed to?" Measures unplanned downtime as a percentage of scheduled production time.</p></div>
+    <div class="formula-card"><div class="formula-name">Performance</div><div class="formula-eq">= Parts Produced<br>  / (Ideal Rate × Run Time)</div><p class="formula-desc">"Was the machine running at its ideal speed?" Captures small stops, speed losses, and micro-stoppages that don't get recorded as full stops.</p></div>
+    <div class="formula-card"><div class="formula-name">Quality</div><div class="formula-eq">= Good Parts<br>  / (Good Parts + Bad Parts)</div><p class="formula-desc">"Were the parts made right the first time?" Measures the percentage of production output that meets quality standards without rework.</p></div>
+    <div class="formula-oee"><div class="formula-name">OEE = Availability × Performance × Quality</div><div class="formula-eq" style="font-size:13px;margin-top:8px">World class: 85%+ | Typical: 60–75% | Low: below 60%</div></div>
+  </div>
+</div>
+
+<!-- SETUP -->
+<div class="setup-sec">
+  <div class="fi"><div class="tag">Getting started</div><h2>HOW TO GET STARTED.</h2><p style="font-size:16px;color:var(--muted2);line-height:1.75;max-width:500px;margin-top:14px">Four steps. No IT department. No hardware. No training sessions.</p></div>
+  <div class="setup-steps fi d1">
+    <div class="setup-step" data-num="1"><h3>Create your account</h3><p>Sign up at app.easy-oee.com. Enter your company name. Takes 2 minutes. No credit card needed for the trial.</p></div>
+    <div class="setup-step" data-num="2"><h3>Add your lines</h3><p>Enter each production line and its ideal parts-per-minute rate. Machine 1, Line A, Press 3 — whatever you call them on the floor.</p></div>
+    <div class="setup-step" data-num="3"><h3>Invite operators</h3><p>Add operators by email. They get a login link. No training required — the interface is self-explanatory from the first use.</p></div>
+    <div class="setup-step" data-num="4"><h3>Start your first shift</h3><p>Your first real OEE data will be on your screen before the shift ends. That's the whole onboarding process.</p></div>
+  </div>
+  <div style="text-align:center;margin-top:52px">
+    <a href="contact.html" class="btn-y" style="font-size:15px;padding:16px 40px">Start Your Free Trial — No Credit Card Required</a>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq-sec">
+  <div class="faq-inner">
+    <div class="fi"><div class="tag">Common questions</div><h2>QUICK ANSWERS.</h2></div>
+    <div style="margin-top:44px">
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do operators need smartphones?<span class="faq-icon">+</span></div><div class="faq-a">No. Easy OEE works on any device with a browser — smartphones, tablets, shared terminals, or a PC on the floor. Many plants use an inexpensive wall-mounted tablet as the shared operator interface.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What if an operator forgets to log a stop?<span class="faq-icon">+</span></div><div class="faq-a">Stops can be added or adjusted within the active shift. The plant manager can also review and edit shift data from the management view before the shift record is finalized.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long does operator training take?<span class="faq-icon">+</span></div><div class="faq-a">Most operators understand the interface within 5 minutes without any formal training. The workflow is: start shift, tap when machine stops, tap when it restarts, end shift. That's it.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What if we have multiple shifts on the same line?<span class="faq-icon">+</span></div><div class="faq-a">Each shift is a separate record. Morning, Afternoon, and Night shifts on the same line are tracked independently and can be compared side by side in the management dashboard.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What happens if the internet goes down on the floor?<span class="faq-icon">+</span></div><div class="faq-a">Easy OEE requires an internet connection to save data in real time. Most plants use a reliable WiFi network or mobile hotspot at the operator station. Offline mode is on the product roadmap.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div><h2>WANT TO SEE IT LIVE?</h2><p>Book a free 30-minute demo. We'll configure it around your plant and run a live shift walkthrough together.</p></div>
+  <a href="contact.html" class="btn-dk">Book a Free Demo →</a>
+</div>
+
+<footer>
+  <div class="fg">
+    <div><div class="fl">Easy OEE</div><p class="fd">Real-time OEE tracking built for Canadian plant managers. No hardware. No complexity.</p><p style="font-size:12px;color:var(--muted);margin-top:12px">Made in Canada 🍁</p></div>
+    <div class="fc"><h4>Product</h4><a href="how-it-works.html">How It Works</a><a href="index.html#features">Features</a><a href="pricing.html">Pricing</a><a href="roi-calculator.html">ROI Calculator</a></div>
+    <div class="fc"><h4>Company</h4><a href="contact.html">Book a Demo</a><a href="contact.html">Contact</a><a href="#">Privacy Policy</a><a href="#">Terms</a></div>
+  </div>
+  <div class="fb"><span>© 2025 Easy OEE Inc. All rights reserved.</span><span>easy-oee.com</span></div>
+</footer>
+<script>
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on')}),{threshold:.08});
+document.querySelectorAll('.fi').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OEE ROI Calculator — How Much Is Your Downtime Costing You?</title>
+<meta name="description" content="Calculate the exact cost of your current OEE losses and your potential return from improving it. Free calculator for Canadian manufacturers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--black:#003038;--white:#EFF5F9;--accent:#03BFB5;--red:#018076;--mid:#004146;--border:rgba(239,245,249,0.10);--border2:rgba(239,245,249,0.18);--muted:rgba(239,245,249,0.42);--muted2:rgba(239,245,249,0.68)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;line-height:1.6}
+h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;line-height:.93}
+h1{font-size:clamp(56px,8vw,105px)}h2{font-size:clamp(34px,5vw,66px)}h3{font-size:clamp(16px,2.5vw,22px);letter-spacing:1px}
+.tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.tag::before{content:'';width:28px;height:1px;background:var(--accent);flex-shrink:0}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:18px 56px;background:rgba(0,48,56,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--accent);text-decoration:none}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:13.5px;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--white)}
+.nav-cta{background:var(--accent)!important;color:#003038!important;padding:9px 22px!important;border-radius:2px!important;font-weight:500!important}
+.page-hdr{padding:160px 56px 80px;position:relative;overflow:hidden;text-align:center}
+.page-hdr::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 50% 60%,rgba(3,191,181,.06) 0%,transparent 70%);pointer-events:none}
+.page-hdr::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(239,245,249,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(239,245,249,.06) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 10%,transparent 100%);pointer-events:none}
+.page-hdr-content{position:relative;max-width:720px;margin:0 auto}
+.page-hdr p{font-size:18px;color:var(--muted2);line-height:1.75;max-width:540px;margin:20px auto 0}
+/* CALCULATOR */
+.calc-sec{padding:0 56px 100px}
+.calc-layout{display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:1100px;margin:0 auto}
+/* INPUTS */
+.inputs-panel{background:var(--mid);border:1px solid var(--border2);border-radius:8px;padding:36px}
+.inputs-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;margin-bottom:28px;color:var(--white)}
+.input-group{margin-bottom:24px}
+.input-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.input-label span:first-child{font-size:13.5px;color:var(--muted2);font-weight:400}
+.input-val{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:1px;min-width:60px;text-align:right}
+input[type=range]{width:100%;height:4px;background:var(--border2);border-radius:2px;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);cursor:pointer;transition:transform .15s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--accent);border:none;cursor:pointer}
+.input-hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6;font-style:italic}
+.input-divider{border:none;border-top:1px solid var(--border);margin:20px 0}
+/* RESULTS */
+.results-panel{display:flex;flex-direction:column;gap:18px}
+.result-card{border:1px solid var(--border2);border-radius:8px;padding:28px;transition:border-color .3s}
+.result-card.losses{border-color:rgba(1,128,118,.25);background:rgba(1,128,118,.03)}
+.result-card.gains{border-color:rgba(3,191,181,.2);background:rgba(3,191,181,.03)}
+.result-card.payback{border-color:rgba(3,191,181,.3);background:rgba(3,191,181,.05)}
+.result-card-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px}
+.result-card.losses .result-card-title{color:var(--red)}
+.result-card.gains .result-card-title{color:var(--accent)}
+.result-card.payback .result-card-title{color:var(--accent)}
+.result-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5vw,60px);line-height:1;letter-spacing:1px;margin-bottom:4px}
+.result-card.losses .result-big{color:var(--red)}
+.result-card.gains .result-big{color:var(--accent)}
+.result-card.payback .result-big{color:var(--accent)}
+.result-sub{font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:14px}
+.result-rows{display:flex;flex-direction:column;gap:7px}
+.result-row{display:flex;justify-content:space-between;align-items:center;font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--border)}
+.result-row:last-child{border-bottom:none}
+.result-row-label{color:var(--muted2)}
+.result-row-val{font-family:'DM Mono',monospace;font-size:13px}
+.result-card.losses .result-row-val{color:var(--red)}
+.result-card.gains .result-row-val{color:var(--accent)}
+/* IMPROVEMENT TOGGLE */
+.improve-btns{display:flex;gap:8px;margin-bottom:16px}
+.improve-btn{flex:1;padding:9px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;border:1px solid var(--border2);border-radius:2px;background:transparent;color:var(--muted2);cursor:pointer;transition:all .2s;text-transform:uppercase}
+.improve-btn:hover{border-color:rgba(3,191,181,.4);color:var(--white)}
+.improve-btn.active{background:rgba(3,191,181,.1);border-color:rgba(3,191,181,.4);color:var(--accent)}
+/* PAYBACK VISUAL */
+.payback-bar{height:6px;background:var(--border);border-radius:3px;margin:12px 0}
+.payback-fill{height:100%;border-radius:3px;background:var(--accent);transition:width .5s ease}
+/* NARRATIVE */
+.narrative-sec{background:var(--mid);padding:80px 56px}
+.narrative-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:52px}
+.nar-card{background:var(--mid);padding:36px 30px}
+.nar-num{font-family:'Bebas Neue',sans-serif;font-size:48px;color:rgba(3,191,181,.15);line-height:1;margin-bottom:4px}
+.nar-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);margin-bottom:10px;letter-spacing:1px}
+.nar-sub{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);margin-bottom:14px;text-transform:uppercase;letter-spacing:1px}
+.nar-card p{font-size:14px;color:var(--muted2);line-height:1.75}
+/* CTA */
+.cta-band{background:var(--accent);padding:96px 56px;display:flex;align-items:center;justify-content:space-between;gap:48px}
+.cta-band h2{color:var(--black);font-size:clamp(32px,5vw,64px);margin-bottom:10px}
+.cta-band p{color:rgba(0,48,56,.6);font-size:16px;max-width:420px;line-height:1.7}
+.cta-btns{display:flex;flex-direction:column;gap:10px;flex-shrink:0}
+.btn-dk{display:inline-block;background:#003038;color:#03BFB5;padding:16px 36px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;border-radius:2px;text-decoration:none;white-space:nowrap;transition:transform .2s;text-align:center}
+.btn-dk:hover{transform:translateY(-2px)}
+.btn-ghost-y{display:inline-block;background:rgba(0,48,56,.15);color:#003038;padding:14px 36px;font-family:'DM Sans',sans-serif;font-weight:400;font-size:14px;border-radius:2px;text-decoration:none;white-space:nowrap;text-align:center}
+footer{background:var(--mid);border-top:1px solid var(--border);padding:44px 56px 28px}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr;gap:44px;margin-bottom:32px}
+.fl{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent);letter-spacing:3px;margin-bottom:11px}
+.fd{font-size:13px;color:var(--muted);line-height:1.8;max-width:230px}
+.fc h4{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:13px}
+.fc a{display:block;font-size:13px;color:rgba(239,245,249,.5);text-decoration:none;margin-bottom:8px;transition:color .2s}
+.fc a:hover{color:var(--white)}
+.fb{padding-top:20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+.fi{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.fi.on{opacity:1;transform:none}
+@media(max-width:960px){nav{padding:14px 24px}.nav-links{display:none}.page-hdr{padding:120px 24px 60px}.calc-sec{padding:0 24px 72px}.calc-layout{grid-template-columns:1fr}.narrative-sec{padding:64px 24px}.narrative-grid{grid-template-columns:1fr}.cta-band{flex-direction:column;text-align:center;padding:72px 24px}.cta-btns{align-items:center}.fg{grid-template-columns:1fr;gap:26px}.fb{flex-direction:column;gap:10px;text-align:center}footer{padding:36px 24px 24px}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Easy OEE</a>
+  <div class="nav-links">
+    <a href="how-it-works.html">How It Works</a>
+    <a href="index.html#features">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="roi-calculator.html" class="active">ROI Calculator</a>
+    <a href="contact.html" class="nav-cta">Book a Demo</a>
+  </div>
+</nav>
+
+<div class="page-hdr">
+  <div class="page-hdr-content fi">
+    <div class="tag" style="justify-content:center">ROI Calculator</div>
+    <h1>HOW MUCH IS YOUR DOWNTIME COSTING YOU?</h1>
+    <p>Enter your plant's numbers. See exactly what your current OEE losses cost — and what improving them would return.</p>
+  </div>
+</div>
+
+<div class="calc-sec">
+  <div class="calc-layout">
+    <!-- INPUTS -->
+    <div class="inputs-panel fi">
+      <div class="inputs-title">Your plant</div>
+
+      <div class="input-group">
+        <div class="input-label"><span>Production lines</span><span class="input-val" id="v-lines">2</span></div>
+        <input type="range" min="1" max="20" value="2" id="r-lines" oninput="update()">
+      </div>
+
+      <div class="input-group">
+        <div class="input-label"><span>Shifts per day</span><span class="input-val" id="v-shifts">2</span></div>
+        <input type="range" min="1" max="3" value="2" id="r-shifts" oninput="update()">
+      </div>
+
+      <div class="input-group">
+        <div class="input-label"><span>Working days per week</span><span class="input-val" id="v-days">5</span></div>
+        <input type="range" min="1" max="7" value="5" id="r-days" oninput="update()">
+      </div>
+
+      <div class="input-group">
+        <div class="input-label"><span>Minutes per shift</span><span class="input-val" id="v-mins">480</span></div>
+        <input type="range" min="240" max="720" step="30" value="480" id="r-mins" oninput="update()">
+      </div>
+
+      <hr class="input-divider">
+
+      <div class="input-group">
+        <div class="input-label"><span>Throughput value ($/minute)</span><span class="input-val" id="v-rate">$85</span></div>
+        <input type="range" min="10" max="500" step="5" value="85" id="r-rate" oninput="update()">
+        <p class="input-hint">Estimate: your hourly revenue ÷ 60. A line producing $5,000/hr of output = $83/min.</p>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label"><span>Current OEE estimate</span><span class="input-val" id="v-oee">65%</span></div>
+        <input type="range" min="20" max="95" value="65" id="r-oee" oninput="update()">
+        <p class="input-hint">World class = 85%+. Canadian SME average = 60–70%. If unsure, leave at 65%.</p>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-panel fi">
+      <!-- LOSSES -->
+      <div class="result-card losses">
+        <div class="result-card-title">What you're losing now</div>
+        <div class="result-big" id="r-loss-pct">35%</div>
+        <div class="result-sub">of planned production time is lost</div>
+        <div class="result-rows">
+          <div class="result-row"><span class="result-row-label">Lost minutes per shift</span><span class="result-row-val" id="r-min-shift">168 min</span></div>
+          <div class="result-row"><span class="result-row-label">Cost per shift</span><span class="result-row-val" id="r-cost-shift">$14,280</span></div>
+          <div class="result-row"><span class="result-row-label">Cost per week</span><span class="result-row-val" id="r-cost-week">$142,800</span></div>
+          <div class="result-row"><span class="result-row-label">Cost per year</span><span class="result-row-val" id="r-cost-year">$7,425,600</span></div>
+        </div>
+      </div>
+
+      <!-- GAINS -->
+      <div class="result-card gains">
+        <div class="result-card-title">Potential gain — select improvement</div>
+        <div class="improve-btns">
+          <button class="improve-btn active" onclick="setImprove(5,this)">+5% OEE</button>
+          <button class="improve-btn" onclick="setImprove(10,this)">+10% OEE</button>
+          <button class="improve-btn" onclick="setImprove(15,this)">+15% OEE</button>
+        </div>
+        <div class="result-big" id="r-gain-yr">$X</div>
+        <div class="result-sub">additional revenue per year</div>
+        <div class="result-rows">
+          <div class="result-row"><span class="result-row-label">Extra minutes per shift</span><span class="result-row-val" id="r-gain-min">—</span></div>
+          <div class="result-row"><span class="result-row-label">Additional revenue / week</span><span class="result-row-val" id="r-gain-week">—</span></div>
+        </div>
+      </div>
+
+      <!-- PAYBACK -->
+      <div class="result-card payback">
+        <div class="result-card-title">Easy OEE payback</div>
+        <div class="result-big" id="r-payback">3 days</div>
+        <div class="result-sub" id="r-payback-sub">to recover the full annual cost</div>
+        <div class="payback-bar"><div class="payback-fill" id="r-payback-bar" style="width:5%"></div></div>
+        <div class="result-rows">
+          <div class="result-row"><span class="result-row-label">Easy OEE Professional (5 lines)</span><span class="result-row-val">$249/month</span></div>
+          <div class="result-row"><span class="result-row-label">Annual cost</span><span class="result-row-val">$2,988/year</span></div>
+          <div class="result-row"><span class="result-row-label">Your projected ROI</span><span class="result-row-val" id="r-roi">—x</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NARRATIVE -->
+<div class="narrative-sec">
+  <div class="fi"><div class="tag">Where do OEE losses come from?</div><h2>THREE TYPES OF LOSSES. ALL MEASURABLE.</h2><p style="font-size:16px;color:var(--muted2);line-height:1.75;max-width:520px;margin-top:14px">Most plant managers are surprised to find out which category is costing them the most. Easy OEE makes all three visible in real time.</p></div>
+  <div class="narrative-grid fi">
+    <div class="nar-card">
+      <div class="nar-num">01</div>
+      <div class="nar-title">Availability Losses</div>
+      <div class="nar-sub">Unplanned downtime</div>
+      <p>The machine stops when it shouldn't. Mechanical failures, waiting for materials, waiting for operators. Every minute of unplanned stop is 100% lost production — and every one needs a reason logged.</p>
+    </div>
+    <div class="nar-card">
+      <div class="nar-num">02</div>
+      <div class="nar-title">Performance Losses</div>
+      <div class="nar-sub">Running below ideal speed</div>
+      <p>The machine is running, but slower than it should be. Small stops, micro-stoppages, reduced speed for quality reasons. These losses are invisible without tracking — which is why most plants underestimate them.</p>
+    </div>
+    <div class="nar-card">
+      <div class="nar-num">03</div>
+      <div class="nar-title">Quality Losses</div>
+      <div class="nar-sub">Making parts that fail</div>
+      <p>Parts that have to be reworked or scrapped. The machine ran, the time was used, but the output has no value. Quality losses are deceptively expensive because the cost of materials and labour is already spent.</p>
+    </div>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div>
+    <h2>READY TO FIND OUT WHERE YOUR LOSSES ARE?</h2>
+    <p>Book a free 30-minute demo. We'll configure Easy OEE around your plant and show you how to start capturing real data from day one.</p>
+  </div>
+  <div class="cta-btns">
+    <a href="contact.html" class="btn-dk">Book a Free Demo →</a>
+    <a href="contact.html" class="btn-ghost-y">Start Free Trial →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="fg">
+    <div><div class="fl">Easy OEE</div><p class="fd">Real-time OEE tracking built for Canadian plant managers. No hardware. No complexity.</p><p style="font-size:12px;color:var(--muted);margin-top:12px">Made in Canada 🍁</p></div>
+    <div class="fc"><h4>Product</h4><a href="how-it-works.html">How It Works</a><a href="index.html#features">Features</a><a href="pricing.html">Pricing</a><a href="roi-calculator.html">ROI Calculator</a></div>
+    <div class="fc"><h4>Company</h4><a href="contact.html">Book a Demo</a><a href="contact.html">Contact</a><a href="#">Privacy Policy</a><a href="#">Terms</a></div>
+  </div>
+  <div class="fb"><span>© 2025 Easy OEE Inc. All rights reserved.</span><span>easy-oee.com</span></div>
+</footer>
+
+<script>
+let improveAmt=5;
+const easyOEEcost=2988;
+
+function fmt(n){return new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD',maximumFractionDigits:0}).format(n)}
+function fmtN(n){return new Intl.NumberFormat('en-CA',{maximumFractionDigits:0}).format(n)}
+
+function update(){
+  const lines=+document.getElementById('r-lines').value;
+  const shifts=+document.getElementById('r-shifts').value;
+  const days=+document.getElementById('r-days').value;
+  const mins=+document.getElementById('r-mins').value;
+  const rate=+document.getElementById('r-rate').value;
+  const oee=+document.getElementById('r-oee').value;
+
+  document.getElementById('v-lines').textContent=lines;
+  document.getElementById('v-shifts').textContent=shifts;
+  document.getElementById('v-days').textContent=days;
+  document.getElementById('v-mins').textContent=mins;
+  document.getElementById('v-rate').textContent='$'+rate;
+  document.getElementById('v-oee').textContent=oee+'%';
+
+  const lossPct=100-oee;
+  const lostMinPerShift=Math.round(mins*(lossPct/100));
+  const costPerShift=Math.round(lostMinPerShift*rate*lines);
+  const costPerWeek=Math.round(costPerShift*shifts*days);
+  const costPerYear=Math.round(costPerWeek*52);
+
+  document.getElementById('r-loss-pct').textContent=lossPct+'%';
+  document.getElementById('r-min-shift').textContent=fmtN(lostMinPerShift)+' min';
+  document.getElementById('r-cost-shift').textContent=fmt(costPerShift);
+  document.getElementById('r-cost-week').textContent=fmt(costPerWeek);
+  document.getElementById('r-cost-year').textContent=fmt(costPerYear);
+
+  calcGain(lines,shifts,days,mins,rate,oee);
+}
+
+function calcGain(lines,shifts,days,mins,rate,oee){
+  const gainMinPerShift=Math.round(mins*(improveAmt/100));
+  const gainPerWeek=Math.round(gainMinPerShift*rate*lines*shifts*days);
+  const gainPerYear=Math.round(gainPerWeek*52);
+
+  document.getElementById('r-gain-yr').textContent=fmt(gainPerYear);
+  document.getElementById('r-gain-min').textContent='+'+fmtN(gainMinPerShift)+' min';
+  document.getElementById('r-gain-week').textContent=fmt(gainPerWeek);
+
+  const paybackDays=gainPerYear>0?Math.max(1,Math.round(easyOEEcost/gainPerYear*365)):999;
+  const roi=gainPerYear>0?Math.round(gainPerYear/easyOEEcost):0;
+
+  document.getElementById('r-payback').textContent=paybackDays<=365?paybackDays+' days':'> 1 year';
+  document.getElementById('r-payback-sub').textContent='to recover the full Easy OEE annual cost';
+  document.getElementById('r-roi').textContent=roi>0?roi+'x':'N/A';
+  const barW=Math.min(100,Math.max(3,Math.round((1-paybackDays/365)*100)));
+  document.getElementById('r-payback-bar').style.width=barW+'%';
+}
+
+function setImprove(amt,btn){
+  improveAmt=amt;
+  document.querySelectorAll('.improve-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  update();
+}
+
+update();
+
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on')}),{threshold:.08});
+document.querySelectorAll('.fi').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
